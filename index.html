@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .payment-methods {
+            padding: 30px;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #6e8efb, #a777e3);
+        }
+        
+        .payment-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .payment-title img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .payment-title h2 {
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .payment-info {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-info:hover {
+            background: #f1f3f5;
+            transform: translateX(5px);
+        }
+        
+        .payment-info .icon {
+            width: 30px;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #6e8efb;
+            font-size: 14px;
+        }
+        
+        .payment-info .content {
+            flex: 1;
+        }
+        
+        .payment-info .content h4 {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 3px;
+        }
+        
+        .payment-info .content p {
+            font-size: 16px;
+            font-weight: 500;
+            color: #495057;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: #6e8efb;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #5a7bf0;
+        }
+        
+        .qris-container {
+            text-align: center;
+            margin-top: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .qris-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .payment-methods {
+                padding: 20px;
+            }
+            
+            .payment-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Payment Gateway</h1>
+            <p>Silahkan pilih metode pembayaran yang tersedia</p>
+        </div>
+        
+        <div class="payment-methods">
+            <!-- DANA Payment -->
+            <div class="payment-card">
+                <div class="payment-title">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA">
+                    <h2>DANA</h2>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-info">
+                        <div class="icon">
+                            <i>#</i>
+                        </div>
+                        <div class="content">
+                            <h4>Nomor DANA</h4>
+                            <p id="dana-number">082125330201</p>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('dana-number')">Salin</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GOPAY Payment -->
+            <div class="payment-card">
+                <div class="payment-title">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/1200px-Gopay_logo.svg.png" alt="GOPAY">
+                    <h2>GOPAY</h2>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-info">
+                        <div class="icon">
+                            <i>#</i>
+                        </div>
+                        <div class="content">
+                            <h4>Nomor GOPAY</h4>
+                            <p id="gopay-number">089503822335</p>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('gopay-number')">Salin</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- QRIS Payment -->
+            <div class="payment-card">
+                <div class="payment-title">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QRIS_logo.svg/1200px-QRIS_logo.svg.png" alt="QRIS">
+                    <h2>QRIS</h2>
+                </div>
+                <div class="qris-container">
+                    <img src="https://i.ibb.co/sdD9bKKz/qr-ID1025401743154-28-06-25-175107252-1751072522951.jpg" alt="QR Code Pembayaran">
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Setelah melakukan pembayaran, harap konfirmasi dengan mengirimkan bukti transfer</p>
+        </div>
+    </div>
+    
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = element.innerText;
+                element.innerText = 'Tersalin!';
+                
+                setTimeout(() => {
+                    element.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+        
+        // Animasi untuk payment cards saat dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.payment-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
